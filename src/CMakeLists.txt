@@ -17,7 +17,7 @@ target_sources(read_table
 
 find_package(HighFive REQUIRED)
 
-target_include_directories(read_table PRIVATE "/Users/jansenpb/codes/HighFive/include")
+target_include_directories(read_table PRIVATE "/usr/local/include/highfive")
 target_include_directories(read_table PRIVATE "/opt/homebrew/opt/hdf5/include")
 target_link_libraries(read_table HighFive)
 
