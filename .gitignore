@@ -1,0 +1,8 @@
+build/*
+*.py
+*.h5
+*.slo
+*.lo
+*.x
+*.mod
+
