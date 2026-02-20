@@ -4,7 +4,7 @@
 #include <vector>
 int main()
 {
-    Table table("cfd_lookup_table_3d.h5");
+    Table table("../cfd_lookup_table_3d.h5");
 
     double T, Yf, Yo, Yp;
 
