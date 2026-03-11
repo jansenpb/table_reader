@@ -13,11 +13,23 @@ class Table {
         std::vector<double> Z;     // mean_mixture_fraction
         std::vector<double> H;     // heat_loss_parameter
         std::vector<double> Zvar;  // variance_fraction
+        std::vector<double> Temperature;
 
-        std::vector<double> Temp;  // solution field for Temperature
-        std::vector<double> Y_Fuel; // solution field for fuel mass fraction
-        std::vector<double> Y_Oxid; // solution field for air mass fraction
-        std::vector<double> Y_Prod; // solution field for product mass fraction
+        std::vector<double> Y_CH4;
+        std::vector<double> Y_O2;
+        std::vector<double> Y_CO2;
+        std::vector<double> Y_H2O;
+        std::vector<double> Y_CO;
+        std::vector<double> Y_OH;
+        std::vector<double> Y_O;
+        std::vector<double> Y_H;
+        std::vector<double> Y_H2;
+        std::vector<double> Y_C2H2;
+        std::vector<double> Y_C6H6;
+        std::vector<double> Y_C;
+        std::vector<double> Y_N2;
+        std::vector<double> rad_source;
+        std::vector<double> edc_mixing;
 
         size_t Nz, Nh, Nv;          // points in the table -> mixture fraction, heat loss, variance 
 
@@ -31,7 +43,11 @@ class Table {
         
         size_t index(size_t i, size_t j, size_t k) const;
 
-        void query(double Zq, double Hq, double Vq, double& T, double& Yf, double& Yo, double& Yp) const;
+        void query(double Zq, double Hq, double Vq,
+                   double& Y_CH4_q, double& Y_O2_q, double& Y_CO2_q, double& Y_H2O_q,
+                   double& Y_CO_q, double& Y_OH_q, double& Y_O_q, double& Y_H_q,
+                   double& Y_H2_q, double& Y_C2H2_q, double& Y_C6H6_q, double& Y_C_q,
+                   double& Y_N2_q, double& rad_q, double& edc_q, double& T_q) const;
 
     /////////// Constructor functions /////////// 
 

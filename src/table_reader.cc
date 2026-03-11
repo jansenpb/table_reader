@@ -10,7 +10,7 @@ Table::Table(const string& filename)
     // Read axes
     // --------------------
     file.getDataSet("/axes/mean_mixture_fraction").read(Z);
-    file.getDataSet("/axes/heat_loss_parameter").read(H);
+    file.getDataSet("/axes/absolute_enthalpy").read(H);
     file.getDataSet("/axes/variance_fraction").read(Zvar);
 
     Nz = Z.size();
@@ -42,10 +42,22 @@ Table::Table(const string& filename)
         ds.read_raw(data.data());
     };
 
-    read_solution("/solution/Temperature", Temp);
-    read_solution("/solution/Y_Fuel",      Y_Fuel);
-    read_solution("/solution/Y_Oxidizer",  Y_Oxid);
-    read_solution("/solution/Y_Product",   Y_Prod);
+    read_solution("/solution/Y_CH4", Y_CH4);
+    read_solution("/solution/Y_O2",  Y_O2);
+    read_solution("/solution/Y_CO2", Y_CO2);
+    read_solution("/solution/Y_H2O", Y_H2O);
+    read_solution("/solution/Y_CO",  Y_CO);
+    read_solution("/solution/Y_OH",  Y_OH);
+    read_solution("/solution/Y_O",   Y_O);
+    read_solution("/solution/Y_H",   Y_H);
+    read_solution("/solution/Y_H2",  Y_H2);
+    read_solution("/solution/Y_C2H2", Y_C2H2);
+    read_solution("/solution/Y_C6H6", Y_C6H6);
+    read_solution("/solution/Y_C",    Y_C);
+    read_solution("/solution/Y_N2",   Y_N2);
+    read_solution("/solution/Temperature", Temperature);
+    read_solution("/solution/radiative_source_term", rad_source);
+    read_solution("/solution/mixing_rate_EDC",       edc_mixing);
 }
 
 size_t Table::index(size_t i, size_t j, size_t k) const {
@@ -75,8 +87,8 @@ double Table::interpolation(const std::vector<double>& field,
     size_t k = find_lower_index(Zvar, Vq);
 
     double tz = (Zq - Z[i]) / (Z[i+1] - Z[i]);
-    double th = (Hq - H[i]) / (H[i+1] - H[i]);
-    double tv = (Vq - Zvar[i]) / (Zvar[i+1] - Zvar[i]);
+    double th = (Hq - H[j]) / (H[j+1] - H[j]);
+    double tv = (Vq - Zvar[k]) / (Zvar[k+1] - Zvar[k]);
 
 
     double c000 = field[index(i,   j,   k)];
@@ -98,18 +110,28 @@ double Table::interpolation(const std::vector<double>& field,
 
     return c0*(1-tv) + c1*tv;
 } 
-void Table::query(double Zq,
-            double Hq,
-            double Vq,
-            double& T,
-            double& Yf,
-            double& Yo,
-            double& Yp) const
+void Table::query(double Zq, double Hq, double Vq,
+                  double& Y_CH4_q, double& Y_O2_q, double& Y_CO2_q, double& Y_H2O_q,
+                  double& Y_CO_q, double& Y_OH_q, double& Y_O_q, double& Y_H_q,
+                  double& Y_H2_q, double& Y_C2H2_q, double& Y_C6H6_q, double& Y_C_q,
+                  double& Y_N2_q, double& rad_q, double& edc_q, double& T_q) const
 {
-    T  = interpolation(Temp  , Zq, Hq, Vq);
-    Yf = interpolation(Y_Fuel, Zq, Hq, Vq);
-    Yo = interpolation(Y_Oxid, Zq, Hq, Vq);
-    Yp = interpolation(Y_Prod, Zq, Hq, Vq);
+    Y_CH4_q = interpolation(Y_CH4, Zq, Hq, Vq);
+    Y_O2_q  = interpolation(Y_O2,  Zq, Hq, Vq);
+    Y_CO2_q = interpolation(Y_CO2, Zq, Hq, Vq);
+    Y_H2O_q = interpolation(Y_H2O, Zq, Hq, Vq);
+    Y_CO_q  = interpolation(Y_CO,  Zq, Hq, Vq);
+    Y_OH_q  = interpolation(Y_OH,  Zq, Hq, Vq);
+    Y_O_q   = interpolation(Y_O,   Zq, Hq, Vq);
+    Y_H_q   = interpolation(Y_H,   Zq, Hq, Vq);
+    Y_H2_q  = interpolation(Y_H2,  Zq, Hq, Vq);
+    Y_C2H2_q = interpolation(Y_C2H2, Zq, Hq, Vq);
+    Y_C6H6_q = interpolation(Y_C6H6, Zq, Hq, Vq);
+    Y_C_q   = interpolation(Y_C,   Zq, Hq, Vq);
+    Y_N2_q  = interpolation(Y_N2,  Zq, Hq, Vq);
+    rad_q   = interpolation(rad_source, Zq, Hq, Vq);
+    edc_q   = interpolation(edc_mixing, Zq, Hq, Vq);
+    T_q     = interpolation(Temperature, Zq, Hq, Vq);
 };
 
 

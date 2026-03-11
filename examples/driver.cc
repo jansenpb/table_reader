@@ -6,14 +6,13 @@ int main()
 {
     Table table("../cfd_lookup_table_3d.h5");
 
-    double T, Yf, Yo, Yp;
+    double Y_CH4, Y_O2, Y_CO2, Y_H2O, Y_CO, Y_OH, Y_O, Y_H, Y_H2, Y_C2H2, Y_C6H6, Y_C, Y_N2, rad, edc, T;
+    table.query(0.04, 0.3, 0.5, Y_CH4, Y_O2, Y_CO2, Y_H2O, Y_CO, Y_OH, Y_O, Y_H, Y_H2, Y_C2H2, Y_C6H6, Y_C, Y_N2, rad, edc, T);
 
-    table.query(0.04, 0.3, 0.5, T, Yf, Yo, Yp);
-
-    std::cout << "Temperature = " << T  << std::endl;
-    std::cout << "Y_fuel      = " << Yf << std::endl;
-    std::cout << "Y_Oxidizer  = " << Yo << std::endl;
-    std::cout << "Y_Product   = " << Yp << std::endl;
+    std::cout << "Temperature = " << T << std::endl;
+    std::cout << "Y_fuel      = " << Y_CH4 << std::endl;
+    std::cout << "Y_Oxidizer  = " << Y_O2 << std::endl;
+    std::cout << "Rad Source  = " << rad << std::endl;
 
     return 0;
 }
