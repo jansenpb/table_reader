@@ -12,10 +12,8 @@ program example_fort
 
     type(C_ptr) :: T_ptr
 
-    real(C_double) :: T 
-    real(C_double) :: Yf 
-    real(C_double) :: Yo 
-    real(C_double) :: Yp
+    real(C_double) :: Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q, Y_CO_q, Y_OH_q, Y_O_q, Y_H_q, Y_H2_q, Y_C2H2_q, Y_C6H6_q, &
+        Y_C_q, Y_N2_q, rad_q, edc_q, T_q
 
     double precision :: Z = 0.04
     double precision :: H = 0.3
@@ -26,11 +24,7 @@ program example_fort
     
     call Table(T_ptr, filename)
 
-    call query(T_ptr, Z, H, V, T, Yf, Yo, Yp)
-
-    write(*,*) "Temp (K)   = ", T
-    write(*,*) "Y_Fuel     = ", Yf
-    write(*,*) "Y_Oxidizer = ", Yo 
-    write(*,*) "Y_Products = ", Yp
+    call query(T_ptr, Z, H, V, Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q, Y_CO_q, &
+                Y_OH_q, Y_O_q, Y_H_q, Y_H2_q, Y_C2H2_q, Y_C6H6_q, Y_C_q, Y_N2_q, rad_q, edc_q, T_q)
 
 end program example_fort

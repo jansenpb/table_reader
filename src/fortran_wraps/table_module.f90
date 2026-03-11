@@ -69,7 +69,8 @@ module table_module
 
         !---------------------------------------------
 
-        subroutine query(T_ptr, Zq_, Hq_, Vq_, T_, Yf_, Yo_, Yp_)
+        subroutine query(T_ptr, Zq_, Hq_, Vq_, Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q, Y_CO_q, &
+                Y_OH_q, Y_O_q, Y_H_q, Y_H2_q, Y_C2H2_q, Y_C6H6_q, Y_C_q, Y_N2_q, rad_q, edc_q, T_q)
             type(C_ptr)     , intent(in) :: T_ptr
             double precision, intent(in) :: Zq_
             double precision, intent(in) :: Hq_
