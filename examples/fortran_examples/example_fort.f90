@@ -12,19 +12,30 @@ program example_fort
 
     type(C_ptr) :: T_ptr
 
-    real(C_double) :: Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q, Y_CO_q, Y_OH_q, Y_O_q, Y_H_q, Y_H2_q, Y_C2H2_q, Y_C6H6_q, &
-        Y_C_q, Y_N2_q, rad_q, edc_q, T_q
+    real(C_double) :: T_q
+    real(C_double), allocatable, dimension(:) :: Y_species
 
-    double precision :: Z = 0.04
-    double precision :: H = 0.3
-    double precision :: V = 0.5
+
+    double precision :: Z = 0.055
+    double precision :: V = 0.2
+    double precision :: H = 100
+    double precision :: M0= 1e12
+    integer          :: n_species, i 
+    character(len=32) :: s_name
     
-    
-    character(len=28) :: filename = "../../cfd_lookup_table_3d.h5"
+    character(len=28) :: filename = "../../cfd_lookup_table_4d.h5"
     
     call Table(T_ptr, filename)
 
-    call query(T_ptr, Z, H, V, Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q, Y_CO_q, &
-                Y_OH_q, Y_O_q, Y_H_q, Y_H2_q, Y_C2H2_q, Y_C6H6_q, Y_C_q, Y_N2_q, rad_q, edc_q, T_q)
+    call get_num_species(T_ptr, n_species)
+    allocate(Y_species(n_species))
+
+    call query(T_ptr, Z, V, H, M0, Y_species, T_q)
+
+    write(*,*) "Temp (K) = ", T_q 
+    do i=1, min(n_species, 5)
+        call get_species_name(T_ptr, i, s_name)
+        write(*,*) "Y_", trim(s_name), " = ", Y_species(i)
+    enddo 
 
 end program example_fort

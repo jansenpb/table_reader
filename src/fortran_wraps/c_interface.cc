@@ -2,6 +2,7 @@
 #include <highfive/H5File.hpp>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,15 +16,22 @@ extern "C" {
         return new Table(string(filename));
     }
 
-    void query_interface(Table *T_ptr, double Zq_, double Hq_, double Vq_,
-                         double& Y_CH4_q, double& Y_O2_q, double& Y_CO2_q, double& Y_H2O_q,
-                         double& Y_CO_q, double& Y_OH_q, double& Y_O_q, double& Y_H_q,
-                         double& Y_H2_q, double& Y_C2H2_q, double& Y_C6H6_q, double& Y_C_q,
-                         double& Y_N2_q, double& rad_q, double& edc_q, double& T_q) {
-        T_ptr->query(Zq_, Hq_, Vq_, 
-                     Y_CH4_q, Y_O2_q, Y_CO2_q, Y_H2O_q,
-                     Y_CO_q, Y_OH_q, Y_O_q, Y_H_q,
-                     Y_H2_q, Y_C2H2_q, Y_C6H6_q, Y_C_q,
-                     Y_N2_q, rad_q, edc_q, T_q);
+    void query_interface(Table *T_ptr, double Zq_, double Vq_, double Hq_, double M0q_, double* Y_species_q, double& T_q) {
+        T_ptr->query(Zq_, Vq_, Zq_, M0q_, Y_species_q, T_q); 
+    }
+
+    int get_num_species_interface(Table *T_ptr) {
+        return T_ptr->get_num_species();
+    }
+
+    void get_species_name_interface(Table *T_ptr, int i, char* names, int max_len) {
+        string s_names = T_ptr->get_species_name(i);
+        int len = min((int)s_names.length(), max_len - 1);
+        for (int j=0; j<len; j++) {
+            names[j] = s_names[j];
+        }
+        for (int j=len; j<max_len; j++) {
+            names[j] = ' ';
+        }
     }
 }

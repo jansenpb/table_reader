@@ -4,15 +4,19 @@
 #include <vector>
 int main()
 {
-    Table table("../cfd_lookup_table_3d.h5");
+    Table table("../cfd_lookup_table_4d.h5");
 
-    double Y_CH4, Y_O2, Y_CO2, Y_H2O, Y_CO, Y_OH, Y_O, Y_H, Y_H2, Y_C2H2, Y_C6H6, Y_C, Y_N2, rad, edc, T;
-    table.query(0.04, 0.3, 0.5, Y_CH4, Y_O2, Y_CO2, Y_H2O, Y_CO, Y_OH, Y_O, Y_H, Y_H2, Y_C2H2, Y_C6H6, Y_C, Y_N2, rad, edc, T);
+    int num_species = table.get_num_species();
+    std::vector<double> Y_species(num_species, 0.0);
+    double T;
+
+    table.query(0.055, 0.2, 100, 1e12, Y_species.data(), T);
 
     std::cout << "Temperature = " << T << std::endl;
-    std::cout << "Y_fuel      = " << Y_CH4 << std::endl;
-    std::cout << "Y_Oxidizer  = " << Y_O2 << std::endl;
-    std::cout << "Rad Source  = " << rad << std::endl;
+
+    for (int i=0;i<std::min(num_species, 5); i++) {
+        std::cout << "Y_" << table.get_species_name(i) << " = " << Y_species[i] << std::endl;
+    }
 
     return 0;
 }
